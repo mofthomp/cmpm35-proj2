@@ -44,6 +44,18 @@ function init(myData) {
         .on('mouseover', function(e, d) {
             d3.select('#tooltip').text((d.Activity))
         });
+    body {
+        .bar {
+        fill: orange;
+         }
+
+        .bar:hover {
+        fill: orangered ;
+         }
+
+        .x.axis path {
+        display: none;
+         }
     
     const xText = svg.append("text")
         .attr("x", width / 2 + 80)
