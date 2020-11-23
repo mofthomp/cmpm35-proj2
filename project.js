@@ -1,9 +1,8 @@
-//idea would be a scatterplot with time x axis, attention y axis. days in different colors. mouse over to see what the activity was
 
-function init(myData) {
+    function init(myData) {
 
-    console.log("hi");
-    //console.log(myData);
+    console.log("Hi");
+    console.log(myData);
     
     
     
@@ -13,7 +12,7 @@ function init(myData) {
     const margin = 80;
     let width = 1000 - 2 * margin;
     let height = 400 - 2 * margin;
-    let colors = { Thurs: 'red', Fri: '#ffa400', Sat: 'green', Sun: '#740079'};
+    let colors = { Thurs: 'red', Fri: 'blue', Sat: 'green', Sun: '#740079'};
     let svg = d3.select('svg');
     let day_num = { Thurs: 0, Fri: 1, Sat: 2, Sun:3};
 
@@ -37,7 +36,9 @@ function init(myData) {
     let xScale = d3.scaleBand()
         .range([0, width])
         .domain(["Thurs", "Fri", "Sat", "Sun"]);
-
+  
+    // console.log(myData.map(d => height - yScale(d.Focus))) // debug heigh binding
+  
     chart.append('g')
         .call(d3.axisLeft(yScale));
 
@@ -54,12 +55,27 @@ function init(myData) {
         .attr("y", d => { return yScale(d.Focus)})
         .attr("height", d => { return height - yScale(d.Focus)})
         .attr("width", 8)
-       /* .attr("opacity", 0.4)
+        .attr("opacity", 0.4)
         .attr("fill", d => colors[d.Date])
-        .on('mouseover', function(e, d) {
-            d3.select('#tooltip').text((d.Activity))
-        });*/
-    
+        .on('mouseover', function(e, d, i) {
+          console.log(e)
+          console.log(d, i)
+          console.log(this)
+      
+          d3.select(this).transition()
+            .duration("200")
+            .attr("fill", "orange")
+        })
+        .on('mouseout', function(e, d, i){
+           d3.select(this).transition()
+             .duration("200")
+             .attr("fill", d => colors[d.Date])
+      
+      
+    }
+        )
+      
+  
     const xText = svg.append("text")
         .attr("x", width / 2 + 80)
         .attr("y", 370)
@@ -82,4 +98,3 @@ function init(myData) {
     
 
 }
-
