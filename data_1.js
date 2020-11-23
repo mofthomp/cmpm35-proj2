@@ -44,6 +44,36 @@ function init(myData) {
         .on('mouseover', function(e, d) {
             d3.select('#tooltip').text((d.Activity))
         });
+  
+   function mousehover(svg) {
+          
+ 
+       /*.bar{
+  fill: orange;
+}*/
+        
+
+        .bar:hover {
+        fill: orangered ;
+         }
+
+        .x.axis path {
+        display: none;
+         }
+    
+    
+    
+    
+    
+    function zoom(svg) {
+  const extent = [[margin.left, margin.top], [width - margin.right, height - margin.top]];
+
+  svg.call(d3.zoom()
+      .scaleExtent([1, 8])
+      .translateExtent(extent)
+      .extent(extent)
+      .on("zoom", zoomed));
+
     
     const xText = svg.append("text")
         .attr("x", width / 2 + 80)
