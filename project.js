@@ -6,7 +6,7 @@ function init(myData) {
     //console.log(myData);
     
     
-    
+
     
 
 
@@ -36,7 +36,8 @@ function init(myData) {
 
     let xScale = d3.scaleBand()
         .range([0, width])
-        .domain(["Thurs", "Fri", "Sat", "Sun"]);
+        .domain(["Thurs", "Fri", "Sat", "Sun"])
+        .padding(0.1)
 
     chart.append('g')
         .call(d3.axisLeft(yScale));
@@ -44,10 +45,12 @@ function init(myData) {
     chart.append('g')
         .attr('transform', `translate(0, ${height})`)
         .call(d3.axisBottom(xScale));
+
     chart.selectAll("bars")
         .data(myData)
         .enter()
         .append("rect")
+    
     
         //.attr("x", d => { return (width / 4) * day_num[d.Date] + 20 + xScale(d.Time)})
         .attr("x", d => {return xScale(d.Date) + parseHour(d.Time)*(width/96)})
@@ -80,6 +83,65 @@ function init(myData) {
         .attr("transform", "translate(10,300) rotate(-90)")
         .text("Focus Level");
     
+    
+    /*
+     var zoom = d3.zoom()
+        .scaleExtent([.5, 20])
+        .extent([0,0], [width, height])
+        .on("zoom", zoomed) // listen for zoom events (typenames, [listener])
+                // if listener is present, sets event listener for typenames and returns zoom behavior
+                // if typename is "zoom", event is after a change to the zoom transform (like on mousemove)
+            
+        function zoomed(event) { // this is the event that happens when "zoom" happens
+            var newX = d3.event.transform.rescaleX(x)
+            xAxis.call(d3.axisBottom(newX))
+            console.log("zoom")
+    }
+    */
 
+   //xAxis = f(g)
+   xAxis = g => g
+       .attr("transform", `translate(0, ${height - margin})`)
+       .call(d3.axisBottom(xScale).tickSizeOuter(0)) // creates new bottom axis with x as a scale
+       // tickSizeOuter(0) sets outer tick to 0 and returns axis
+       // outer ticks are part of domain path and determined by scale's domain extent
+       // 0 suppresses square ends of domain path, producing straight line
+   
+
+    zoom(chart)
+    
+    function zoom(svg) {
+        const extent = [[margin, margin], [width - margin, height - margin]];
+        // margin refers to viewport margins?
+        svg.call(d3.zoom() // calls and defines zoom behavior
+            .scaleExtent([1, 8]) // set the allowed scale range
+            .translateExtent(extent) //set the extent of the zoomzble world
+            .extent(extent) // set extent of viewpoint
+            .on("zoom", zoomed) // listen for zoom events (typenames, [listener])
+            // if listener is present, sets event listener for typenames and returns zoom behavior
+            // if typename is "zoom", event is after a change to the zoom transform (like on mousemove)
+        );
+        
+        function zoomed(event) { // this is the event that happens when "zoom" happens
+            xScale.range([margin, width - margin].map(d => event.transform.applyX(d))) 
+            // x.range becomes the result of transformation
+            
+            chart.selectAll("bars") // for each selected element, selects the decedant elements that match selector string
+                .attr("x", d => xScale(d.Date))
+                .attr("width", xScale.bandwidth())
+            svg.selectAll(".x-axis")
+                .call(xAxis)
+            console.log('zoomed')
+        }
+    
+    /*SVG.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr("transform", `translate(' + margin + ',' + margin + ')`)
+    .call(zoom)
+     */   
+        
+    }
 }
-
