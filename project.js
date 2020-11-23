@@ -128,20 +128,28 @@ function init(myData) {
             
             chart.selectAll("bars") // for each selected element, selects the decedant elements that match selector string
                 .attr("x", d => xScale(d.Date))
-                .attr("width", xScale.bandwidth())
+                .attr("width", 14)
+                console.log('ee')
             svg.selectAll(".x-axis")
                 .call(xAxis)
             console.log('zoomed')
         }
     
-    /*SVG.append("rect")
-    .attr("width", width)
-    .attr("height", height)
-    .style("fill", "none")
-    .style("pointer-events", "all")
-    .attr("transform", `translate(' + margin + ',' + margin + ')`)
-    .call(zoom)
-     */   
+        function updateChart() {
+
+            // recover the new scale
+            var newX = d3.event.transform.rescaleX(x);
+            //var newY = d3.event.transform.rescaleY(y);
         
+            // update axes with these new boundaries
+            xAxis.call(d3.axisBottom(newX))
+            yAxis.call(d3.axisLeft(newY))
+        
+            // update circle position
+            bars
+              .selectAll("bar")
+              .attr('cx', function(d) {return newX(d.Sepal_Length)})
+              //.attr('cy', function(d) {return newY(d.Petal_Length)});
+          } 
     }
 }
