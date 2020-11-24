@@ -1,0 +1,42 @@
+<html>
+
+<head>
+
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  
+  <script src="./project.js"></script>
+
+</head>
+
+<body>
+  
+  <svg width = 1000 height = 400></svg>  
+  <p>
+      <h2><i>GRAPHIC DESIGN IS MY PASSION</i></h2>
+    </p>
+  <script>
+    
+
+    
+    let myData = d3.csv("focus_edited.csv").then(function(myData){
+        //console.log("hello");
+        //console.log(myData);
+        
+        init(myData);
+    });
+    
+
+  </script>
+  <p>
+    <h3>
+      <font face="arial, helvetica, sans-serif">Activity: </font></h3>
+    <h4 style="margin-left: 40px;">
+      <span id = "tooltip" style="font-family:arial, helvetica, sans-serif;">  
+      hover over bars to see activity type</span></h4>
+  </p>
+  
+
+  
+</body>
+
+</html>

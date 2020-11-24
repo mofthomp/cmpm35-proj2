@@ -12,7 +12,7 @@ function init(myData) {
     const margin = 80;
     let width = 1000 - 2 * margin;
     let height = 400 - 2 * margin;
-    let colors = { Thurs: 'red', Fri: '#ffa400', Sat: 'green', Sun: '#740079'};
+    let colors = { Thurs: 'red', Fri: 'blue', Sat: 'green', Sun: '#740079'};
     let svg = d3.select('svg');
     let day_num = { Thurs: 0, Fri: 1, Sat: 2, Sun:3};
 
@@ -52,16 +52,31 @@ function init(myData) {
         .append("rect")
     
     
-        //.attr("x", d => { return (width / 4) * day_num[d.Date] + 20 + xScale(d.Time)})
         .attr("x", d => {return xScale(d.Date) + parseHour(d.Time)*(width/96)})
         .attr("y", d => { return yScale(d.Focus)})
         .attr("height", d => { return height - yScale(d.Focus)})
         .attr("width", 8)
-       /* .attr("opacity", 0.4)
+        .attr("opacity", 0.4)
         .attr("fill", d => colors[d.Date])
-        .on('mouseover', function(e, d) {
-            d3.select('#tooltip').text((d.Activity))
-        });*/
+        
+        .on('mouseover', function(e, d, i) {
+          /*console.log(e)
+          console.log(d, i)
+          console.log(this)*/
+          let this_act = d.Activity
+          d3.select('#tooltip').text((d.Activity))
+          d3.selectAll("rect").transition()
+            .filter(d => {return d.Activity == this_act})
+            //console.log(this_act)
+            .duration("200")
+            .attr("fill", "orange")
+        })
+        .on('mouseout', function(e, d, i){
+           let this_act = d.Activity
+           d3.selectAll("rect").transition()
+            //.filter(d => {return d.Activity == this_act})
+            .duration("50")
+            .attr("fill", d => colors[d.Date])})
     
     const xText = svg.append("text")
         .attr("x", width / 2 + 80)
@@ -122,7 +137,7 @@ function init(myData) {
             
             chart.selectAll(".x-axis")
                 .attr("class", "x-axis")
-                .call(d3.axisBottom(xScale).tickSizeOuter(0))
+                .call(d3.axisBottom(xScale).tickSizeOuter(0));
         }
     }
 }
