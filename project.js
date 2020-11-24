@@ -119,8 +119,6 @@ function init(myData) {
                 .attr("x", d => xScale(d.Date) + (parseHour(d.Time))*(xScale.bandwidth()/24))
                 .attr("width", (xScale.bandwidth()/24)-(xScale.bandwidth()/24/8))
             console.log(xScale.bandwidth())
-
-
             
             chart.selectAll(".x-axis")
                 .attr("class", "x-axis")
